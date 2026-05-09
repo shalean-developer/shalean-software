@@ -41,7 +41,7 @@ export function OperationsCommandBar(props: { className?: string }) {
   const [recent, setRecent] = useState<RecentEntry[]>([]);
 
   useEffect(() => {
-    setRecent(readRecent());
+    queueMicrotask(() => setRecent(readRecent()));
   }, []);
 
   const trimmed = input.trim();

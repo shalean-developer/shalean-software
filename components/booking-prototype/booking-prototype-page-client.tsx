@@ -13,7 +13,7 @@ export function BookingPrototypePageClient({ supportEmail }: { supportEmail: str
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    setReady(true);
+    queueMicrotask(() => setReady(true));
   }, []);
 
   if (!ready) {

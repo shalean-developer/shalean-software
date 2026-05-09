@@ -61,6 +61,15 @@ export function StepHomeDetails({
   draft: BookingPrototypeDraft;
   updateDraft: (patch: Partial<BookingPrototypeDraft>) => void;
 }) {
+  useEffect(() => {
+    if (!draft.serviceType || !SERVICES_WITH_ROOM_DEFAULTS.has(draft.serviceType)) return;
+    const patch: Partial<BookingPrototypeDraft> = {};
+    if (draft.bedrooms === "") patch.bedrooms = 2;
+    if (draft.bathrooms === "") patch.bathrooms = 1;
+    if (Object.keys(patch).length === 0) return;
+    updateDraft(patch);
+  }, [draft.serviceType, draft.bedrooms, draft.bathrooms, updateDraft]);
+
   if (!draft.serviceType) {
     return <p className={bpHint}>Choose a service first — use Back if you need to change it.</p>;
   }
@@ -71,15 +80,6 @@ export function StepHomeDetails({
     svc.dynamicFormType === "residential_rooms_deep_context" ||
     svc.dynamicFormType === "residential_rooms_airbnb_turnover" ||
     svc.dynamicFormType === "residential_rooms_move_context";
-
-  useEffect(() => {
-    if (!draft.serviceType || !SERVICES_WITH_ROOM_DEFAULTS.has(draft.serviceType)) return;
-    const patch: Partial<BookingPrototypeDraft> = {};
-    if (draft.bedrooms === "") patch.bedrooms = 2;
-    if (draft.bathrooms === "") patch.bathrooms = 1;
-    if (Object.keys(patch).length === 0) return;
-    updateDraft(patch);
-  }, [draft.serviceType, draft.bedrooms, draft.bathrooms, updateDraft]);
 
   return (
     <div className="flex flex-col gap-8">

@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { Briefcase, LayoutDashboard, Sparkles, UserRound } from "lucide-react";
 
-import { Button, buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 import { bp, bpHint, bpOverline, bpSectionHeading } from "@/components/booking-prototype/visual-system";

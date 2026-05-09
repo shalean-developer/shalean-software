@@ -248,7 +248,8 @@ export function StepReview({
   const summaryCollapsed = contactRevealed && !visitSummaryExpanded;
 
   useEffect(() => {
-    if (!contactRevealed) setVisitSummaryExpanded(false);
+    if (contactRevealed) return;
+    queueMicrotask(() => setVisitSummaryExpanded(false));
   }, [contactRevealed]);
 
   return (

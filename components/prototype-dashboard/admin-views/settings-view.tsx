@@ -130,7 +130,9 @@ export function AdminSettingsView() {
             Add area
           </button>
         </div>
-        <p className="mt-0.5 text-[12px] text-muted-foreground">Tap an area to toggle whether it's bookable.</p>
+        <p className="mt-0.5 text-[12px] text-muted-foreground">
+          Tap an area to toggle whether it&apos;s bookable.
+        </p>
         <div className="mt-3 flex flex-wrap gap-1.5">
           {ADMIN_SERVICE_AREAS.map((seed) => {
             const live = state.liveAreas[seed.name] ?? seed.live;

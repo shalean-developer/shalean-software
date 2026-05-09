@@ -54,7 +54,6 @@ function VisitDetail({ bookingId, onClose }: { bookingId: string; onClose: () =>
     advanceBookingStatus,
     setBookingStatus,
     openDetail,
-    cancelBooking,
     restoreBooking,
     navigate,
   } = useCustomerWorkflow();

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { ArrowRight } from "lucide-react";
 import { Drawer } from "@base-ui/react/drawer";
 
@@ -51,7 +51,8 @@ const primaryCtaClass =
 const backGhostClass =
   "rounded-xl touch-manipulation font-medium text-muted-foreground transition-[transform,colors,opacity] duration-150 ease-out hover:bg-muted/40 hover:text-foreground motion-safe:active:scale-[0.99] motion-reduce:transition-none";
 
-export function PrototypeStickySummary({
+/** `key={draft.step}` from parent resets drawer open state when the step changes. */
+function PrototypeStickySummaryMobile({
   draft,
   canProceed,
   blockedHint,
@@ -59,96 +60,22 @@ export function PrototypeStickySummary({
   onPrimary,
   onBack,
   showBack = false,
-  variant,
-  ctaPrimaryOverride,
-  ctaReassuranceOverride,
+  cta,
 }: {
   draft: BookingPrototypeDraft;
   canProceed: boolean;
   blockedHint: string | null;
   pending?: boolean;
   onPrimary: () => void;
-  /** Step &gt; 1 — paired with Continue in the action row (does not alter navigation logic). */
   onBack?: () => void;
   showBack?: boolean;
-  variant: "rail" | "mobile";
-  ctaPrimaryOverride?: string;
-  ctaReassuranceOverride?: string;
+  cta: { primary: string; reassurance: string };
 }) {
   const service = BOOKING_SERVICES.find((s) => s.slug === draft.serviceType);
   const quote = computeMockQuote(draft);
-  const ctaBase = STEP_CTA[draft.step] ?? STEP_CTA[1];
-  const cta = {
-    primary: ctaPrimaryOverride ?? ctaBase.primary,
-    reassurance: ctaReassuranceOverride ?? ctaBase.reassurance,
-  };
-
-  const [sheetOpen, setSheetOpen] = useState(false);
-
-  useEffect(() => {
-    setSheetOpen(false);
-  }, [draft.step]);
-
-  const isRail = variant === "rail";
-
-  if (isRail) {
-    return (
-      <div
-        className={cn(
-          "sticky flex w-full max-h-[calc(100dvh-6rem)] flex-col gap-5 transition-shadow duration-300 ease-out motion-reduce:transition-none",
-          bp.railStickyTop,
-          bp.stickyRail,
-        )}
-      >
-        <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain [-webkit-overflow-scrolling:touch]">
-          <BookingSummaryDetailBody draft={draft} />
-        </div>
-
-        <div className="shrink-0 space-y-2.5">
-          <div className={cn("flex items-center gap-2", showBack ? "justify-between" : "flex-col")}>
-            {showBack && onBack ? (
-              <Button
-                type="button"
-                variant="ghost"
-                size="lg"
-                onClick={onBack}
-                className={cn(backGhostClass, "h-[3.05rem] shrink-0 px-3 text-[14px]")}
-              >
-                ← Back
-              </Button>
-            ) : null}
-            <Button
-              type="button"
-              size="lg"
-              disabled={!canProceed || pending}
-              onClick={onPrimary}
-              aria-describedby={!canProceed && blockedHint ? "prototype-cta-hint" : undefined}
-              className={cn(
-                primaryCtaClass,
-                "h-[3.05rem] text-[15px]",
-                showBack ? "min-w-0 flex-1" : "w-full",
-              )}
-            >
-              {pending ? "One moment…" : cta.primary}
-              {!pending ? <ArrowRight className="size-4 opacity-90" aria-hidden /> : null}
-            </Button>
-          </div>
-          {canProceed ? (
-            <p className="text-center text-[11px] leading-snug text-muted-foreground">{cta.reassurance}</p>
-          ) : blockedHint ? (
-            <p id="prototype-cta-hint" className="text-center text-[11px] leading-snug text-muted-foreground">
-              {blockedHint}
-            </p>
-          ) : (
-            <p className="text-center text-[11px] leading-snug text-muted-foreground">{cta.reassurance}</p>
-          )}
-        </div>
-      </div>
-    );
-  }
-
   const serviceTitle = service?.title ?? "Your visit";
   const estimateLine = quote ? formatZar(quote.totalZar) : "Estimate shortly";
+  const [sheetOpen, setSheetOpen] = useState(false);
 
   return (
     <Drawer.Root open={sheetOpen} onOpenChange={setSheetOpen}>
@@ -251,5 +178,108 @@ export function PrototypeStickySummary({
         </Drawer.Viewport>
       </Drawer.Portal>
     </Drawer.Root>
+  );
+}
+
+export function PrototypeStickySummary({
+  draft,
+  canProceed,
+  blockedHint,
+  pending,
+  onPrimary,
+  onBack,
+  showBack = false,
+  variant,
+  ctaPrimaryOverride,
+  ctaReassuranceOverride,
+}: {
+  draft: BookingPrototypeDraft;
+  canProceed: boolean;
+  blockedHint: string | null;
+  pending?: boolean;
+  onPrimary: () => void;
+  /** Step &gt; 1 — paired with Continue in the action row (does not alter navigation logic). */
+  onBack?: () => void;
+  showBack?: boolean;
+  variant: "rail" | "mobile";
+  ctaPrimaryOverride?: string;
+  ctaReassuranceOverride?: string;
+}) {
+  const ctaBase = STEP_CTA[draft.step] ?? STEP_CTA[1];
+  const cta = {
+    primary: ctaPrimaryOverride ?? ctaBase.primary,
+    reassurance: ctaReassuranceOverride ?? ctaBase.reassurance,
+  };
+
+  const isRail = variant === "rail";
+
+  if (isRail) {
+    return (
+      <div
+        className={cn(
+          "sticky flex w-full max-h-[calc(100dvh-6rem)] flex-col gap-5 transition-shadow duration-300 ease-out motion-reduce:transition-none",
+          bp.railStickyTop,
+          bp.stickyRail,
+        )}
+      >
+        <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain [-webkit-overflow-scrolling:touch]">
+          <BookingSummaryDetailBody draft={draft} />
+        </div>
+
+        <div className="shrink-0 space-y-2.5">
+          <div className={cn("flex items-center gap-2", showBack ? "justify-between" : "flex-col")}>
+            {showBack && onBack ? (
+              <Button
+                type="button"
+                variant="ghost"
+                size="lg"
+                onClick={onBack}
+                className={cn(backGhostClass, "h-[3.05rem] shrink-0 px-3 text-[14px]")}
+              >
+                ← Back
+              </Button>
+            ) : null}
+            <Button
+              type="button"
+              size="lg"
+              disabled={!canProceed || pending}
+              onClick={onPrimary}
+              aria-describedby={!canProceed && blockedHint ? "prototype-cta-hint" : undefined}
+              className={cn(
+                primaryCtaClass,
+                "h-[3.05rem] text-[15px]",
+                showBack ? "min-w-0 flex-1" : "w-full",
+              )}
+            >
+              {pending ? "One moment…" : cta.primary}
+              {!pending ? <ArrowRight className="size-4 opacity-90" aria-hidden /> : null}
+            </Button>
+          </div>
+          {canProceed ? (
+            <p className="text-center text-[11px] leading-snug text-muted-foreground">{cta.reassurance}</p>
+          ) : blockedHint ? (
+            <p id="prototype-cta-hint" className="text-center text-[11px] leading-snug text-muted-foreground">
+              {blockedHint}
+            </p>
+          ) : (
+            <p className="text-center text-[11px] leading-snug text-muted-foreground">{cta.reassurance}</p>
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <PrototypeStickySummaryMobile
+      key={draft.step}
+      draft={draft}
+      canProceed={canProceed}
+      blockedHint={blockedHint}
+      pending={pending}
+      onPrimary={onPrimary}
+      onBack={onBack}
+      showBack={showBack}
+      cta={cta}
+    />
   );
 }

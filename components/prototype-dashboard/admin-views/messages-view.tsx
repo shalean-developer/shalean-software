@@ -132,7 +132,9 @@ export function AdminMessagesView() {
           {threads.length === 0 ? (
             <div className="px-4 py-6 text-center">
               <p className="text-[13px] font-medium text-foreground">No threads in this lane yet</p>
-              <p className="mt-1 text-[12px] text-muted-foreground">Switch to "All" or "Customer support" to triage.</p>
+              <p className="mt-1 text-[12px] text-muted-foreground">
+                Switch to &ldquo;All&rdquo; or &ldquo;Customer support&rdquo; to triage.
+              </p>
             </div>
           ) : (
             <ul className="max-h-[60vh] divide-y divide-border/55 overflow-y-auto">

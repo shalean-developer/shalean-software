@@ -10,7 +10,7 @@ import { bpHint, bpLegend } from "./visual-system";
 /**
  * Compact segmented pills + lightweight tooltips:
  * — Desktop: hover shows floating hint (`group-hover`).
- * — Touch: tap toggles hint bubble (`aria-expanded` on control); outside tap closes.
+ * — Touch: tap toggles hint bubble (`data-tip-open` on control); outside tap closes.
  */
 export function PrototypeCleaningIntensityRow({
   value,
@@ -52,7 +52,7 @@ export function PrototypeCleaningIntensityRow({
                 type="button"
                 role="radio"
                 aria-checked={selected}
-                aria-expanded={tipOpen}
+                data-tip-open={tipOpen ? "" : undefined}
                 aria-describedby={`${rootId}-tip-${p.id}`}
                 onClick={() => {
                   onChange(p.id);

@@ -167,7 +167,9 @@ export function AdminDispatchView() {
           <h1 className="booking-display mt-1 text-[1.4rem] font-normal tracking-tight text-foreground sm:text-[1.55rem]">
             Orchestration
           </h1>
-          <p className="mt-1 text-[13px] text-muted-foreground">Assignments, conflicts, and matching across today's lanes.</p>
+          <p className="mt-1 text-[13px] text-muted-foreground">
+            Assignments, conflicts, and matching across today&apos;s lanes.
+          </p>
         </div>
         <div className="flex flex-wrap gap-1.5">
           <span className={adminChipClass("muted")}>{totalSlots} slots</span>

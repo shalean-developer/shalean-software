@@ -247,13 +247,11 @@ function CustomerMoreDrawer({
   onClose,
   activeTab,
   onSelect,
-  unread,
 }: {
   open: boolean;
   onClose: () => void;
   activeTab: CustomerNavTab;
   onSelect: (tab: CustomerNavTab) => void;
-  unread: number;
 }) {
   const { pushToast, openDetail, primaryBookingId } = useCustomerWorkflow();
 
@@ -611,7 +609,6 @@ function CustomerDashboardShell() {
         onClose={() => setMoreOpen(false)}
         activeTab={activeTab}
         onSelect={go}
-        unread={unreadMessages}
       />
 
       <div className="isolate mx-auto flex w-full max-w-6xl flex-1 flex-col gap-0 px-4 pt-4 sm:px-6 md:flex-row md:gap-8 md:pt-6 lg:gap-10">

@@ -75,7 +75,9 @@ export function AdminBookingsView() {
           <h1 className="booking-display mt-1 text-[1.4rem] font-normal tracking-tight text-foreground sm:text-[1.55rem]">
             Booking operations
           </h1>
-          <p className="mt-1 text-[13px] text-muted-foreground">Search, filter, and triage today's queue.</p>
+          <p className="mt-1 text-[13px] text-muted-foreground">
+            Search, filter, and triage today&apos;s queue.
+          </p>
         </div>
         <span className={adminChipClass("muted")}>{items.length} shown</span>
       </div>
