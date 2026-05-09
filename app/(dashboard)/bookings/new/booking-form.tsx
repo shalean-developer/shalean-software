@@ -5,7 +5,9 @@ import { useRouter } from "next/navigation";
 import { useMemo, useTransition, useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
 
+import { bp } from "@/components/booking-prototype/visual-system";
 import { BookingStickySummary } from "@/components/booking/customer/booking-sticky-summary";
+import { CustomerScheduleSection } from "@/components/booking/customer/customer-schedule-section";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -19,8 +21,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { createDraftBookingAction } from "@/lib/bookings/customer-flow/actions";
-import { formatCustomerBookingRange } from "@/lib/bookings/customer-flow/display-schedule";
-import { localWallToUtcSchemaFields, parseLocalWall } from "@/lib/bookings/customer-flow/local-schedule-bridge";
+import { localWallToUtcSchemaFields } from "@/lib/bookings/customer-flow/local-schedule-bridge";
+import {
+  buildCustomerScheduleSummaryLine,
+  isCustomerScheduleSummaryPlaceholder,
+} from "@/lib/bookings/customer-flow/schedule-presentation";
 import { mergeCustomerBookingFormDefaults } from "@/lib/bookings/customer-flow/rebook-search-params";
 import {
   customerBookingFormSchema,
@@ -92,21 +97,11 @@ export function BookingForm(props: {
     ],
   });
 
-  const scheduleLine = useMemo(() => {
-    if (!service_date || !start_time || !end_time) {
-      return "Pick a date and arrival window";
-    }
-    try {
-      const start = parseLocalWall(service_date, start_time);
-      const end = parseLocalWall(service_date, end_time);
-      if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime()) || end <= start) {
-        return "Pick a date and arrival window";
-      }
-      return formatCustomerBookingRange(start.toISOString(), end.toISOString());
-    } catch {
-      return "Pick a date and arrival window";
-    }
-  }, [service_date, start_time, end_time]);
+  const scheduleLine = useMemo(
+    () => buildCustomerScheduleSummaryLine({ service_date, start_time, end_time }),
+    [service_date, start_time, end_time],
+  );
+  const scheduleSummaryPlaceholder = isCustomerScheduleSummaryPlaceholder(scheduleLine);
 
   const addressLine = useMemo(() => {
     const parts = [address_line1?.trim(), locality?.trim()].filter(Boolean);
@@ -163,34 +158,45 @@ export function BookingForm(props: {
               </p>
             </div>
           ) : null}
-          <Section
+          <CustomerScheduleSection
             title="When should we arrive?"
             description="Times use your device timezone. We translate them into our operational calendar automatically."
+            summaryLine={scheduleLine}
+            summaryPlaceholder={scheduleSummaryPlaceholder}
           >
-            <div className="grid gap-4 sm:grid-cols-2">
-              <div className="sm:col-span-2 grid gap-2">
-                <Label htmlFor="service_date">Date</Label>
-                <Input id="service_date" type="date" {...form.register("service_date")} />
-                {form.formState.errors.service_date?.message ? (
-                  <p className="text-xs text-destructive">{form.formState.errors.service_date.message}</p>
-                ) : null}
-              </div>
-              <div className="grid gap-2">
-                <Label htmlFor="start_time">Start time</Label>
-                <Input id="start_time" type="time" {...form.register("start_time")} />
-                {form.formState.errors.start_time?.message ? (
-                  <p className="text-xs text-destructive">{form.formState.errors.start_time.message}</p>
-                ) : null}
-              </div>
-              <div className="grid gap-2">
-                <Label htmlFor="end_time">End time</Label>
-                <Input id="end_time" type="time" {...form.register("end_time")} />
-                {form.formState.errors.end_time?.message ? (
-                  <p className="text-xs text-destructive">{form.formState.errors.end_time.message}</p>
-                ) : null}
-              </div>
+            <div className="sm:col-span-2 grid gap-2">
+              <Label htmlFor="service_date" className={cn(bp.bookingFieldLabel, "leading-none")}>
+                Date
+              </Label>
+              <Input
+                id="service_date"
+                type="date"
+                className={cn(bp.control)}
+                {...form.register("service_date")}
+              />
+              {form.formState.errors.service_date?.message ? (
+                <p className="text-xs text-destructive">{form.formState.errors.service_date.message}</p>
+              ) : null}
             </div>
-          </Section>
+            <div className="grid gap-2">
+              <Label htmlFor="start_time" className={cn(bp.bookingFieldLabel, "leading-none")}>
+                Start time
+              </Label>
+              <Input id="start_time" type="time" className={cn(bp.control)} {...form.register("start_time")} />
+              {form.formState.errors.start_time?.message ? (
+                <p className="text-xs text-destructive">{form.formState.errors.start_time.message}</p>
+              ) : null}
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="end_time" className={cn(bp.bookingFieldLabel, "leading-none")}>
+                End time
+              </Label>
+              <Input id="end_time" type="time" className={cn(bp.control)} {...form.register("end_time")} />
+              {form.formState.errors.end_time?.message ? (
+                <p className="text-xs text-destructive">{form.formState.errors.end_time.message}</p>
+              ) : null}
+            </div>
+          </CustomerScheduleSection>
 
           <Section title="Where are we cleaning?" description="Use the address where the team should meet you or access the property.">
             <div className="grid gap-4 sm:grid-cols-2">
