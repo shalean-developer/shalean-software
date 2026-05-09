@@ -1,0 +1,88 @@
+/* Customer prototype — soft motion only; respect prefers-reduced-motion in markup. */
+
+@keyframes proto-dash-step-glow {
+  0%,
+  100% {
+    box-shadow:
+      0 2px 12px -4px color-mix(in oklab, var(--primary) 45%, transparent),
+      0 0 0 0 color-mix(in oklab, var(--primary) 28%, transparent);
+  }
+  50% {
+    box-shadow:
+      0 4px 18px -4px color-mix(in oklab, var(--primary) 55%, transparent),
+      0 0 0 6px color-mix(in oklab, var(--primary) 12%, transparent);
+  }
+}
+
+@keyframes proto-dash-line-shimmer {
+  0% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.55;
+  }
+}
+
+@keyframes proto-dash-typing-dot {
+  0%,
+  60%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.35;
+  }
+  30% {
+    transform: translateY(-3px);
+    opacity: 1;
+  }
+}
+
+.proto-dash-timeline-current-dot {
+  animation: proto-dash-step-glow 2.6s ease-in-out infinite;
+}
+
+.proto-dash-timeline-active-line {
+  animation: proto-dash-line-shimmer 2.2s ease-in-out infinite;
+}
+
+.proto-dash-typing-dot:nth-child(1) {
+  animation: proto-dash-typing-dot 1.1s ease-in-out infinite;
+}
+.proto-dash-typing-dot:nth-child(2) {
+  animation: proto-dash-typing-dot 1.1s ease-in-out 0.15s infinite;
+}
+.proto-dash-typing-dot:nth-child(3) {
+  animation: proto-dash-typing-dot 1.1s ease-in-out 0.3s infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .proto-dash-timeline-current-dot,
+  .proto-dash-timeline-active-line,
+  .proto-dash-typing-dot:nth-child(1),
+  .proto-dash-typing-dot:nth-child(2),
+  .proto-dash-typing-dot:nth-child(3) {
+    animation: none !important;
+  }
+}
+
+@keyframes proto-dash-empty-shimmer {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 0.75;
+  }
+}
+
+.proto-dash-empty-shimmer {
+  animation: proto-dash-empty-shimmer 2.8s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .proto-dash-empty-shimmer {
+    animation: none !important;
+  }
+}

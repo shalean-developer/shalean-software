@@ -1,0 +1,241 @@
+/**
+ * Premium booking calendar — overrides react-day-picker/style.css.
+ * Scoped under .bp-daypicker-wrap. Uses table-safe rules (no flex on tr/tbody).
+ */
+
+.bp-daypicker-wrap {
+  width: 100%;
+  max-width: 100%;
+}
+
+.bp-daypicker-wrap .rdp-root {
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+
+  /* Compact header */
+  --rdp-nav-height: 2.125rem;
+  --rdp-nav_button-width: 2rem;
+  --rdp-nav_button-height: 2rem;
+
+  /* Equal grid cells — table-layout fixed distributes columns */
+  --rdp-day-width: 100%;
+  --rdp-day-height: auto;
+  --rdp-day_button-width: 2.375rem;
+  --rdp-day_button-height: 2.375rem;
+  --rdp-day_button-border-radius: 0.5rem;
+  --rdp-day_button-border: 1px solid transparent;
+
+  /* Softer selection — avoid default accent + heavy border */
+  --rdp-accent-color: var(--foreground);
+  --rdp-accent-background-color: color-mix(in oklch, var(--foreground) 9%, var(--popover));
+  --rdp-selected-border: 1px solid transparent;
+
+  --rdp-outside-opacity: 1;
+  --rdp-disabled-opacity: 1;
+  --rdp-today-color: var(--foreground);
+  --rdp-weekday-opacity: 1;
+  --rdp-weekday-padding: 0.35rem 0 0.45rem;
+}
+
+.bp-daypicker-wrap .rdp-months {
+  max-width: 100%;
+}
+
+.bp-daypicker-wrap .rdp-month {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  width: 100%;
+}
+
+/* Caption row — balanced with navLayout="around" (buttons beside title) */
+.bp-daypicker-wrap .rdp-month_caption {
+  height: var(--rdp-nav-height);
+  min-height: var(--rdp-nav-height);
+  margin-bottom: 0.125rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.bp-daypicker-wrap .rdp-caption_label {
+  font-size: inherit;
+  font-weight: inherit;
+  letter-spacing: inherit;
+}
+
+/* Smaller nav — elegant, aligned with caption height */
+.bp-daypicker-wrap .rdp-button_previous,
+.bp-daypicker-wrap .rdp-button_next {
+  width: var(--rdp-nav_button-width);
+  height: var(--rdp-nav_button-height);
+  border-radius: 0.5rem;
+  border: 1px solid color-mix(in oklch, var(--foreground) 7%, transparent);
+  background-color: color-mix(in oklch, var(--muted) 40%, var(--popover));
+  color: var(--foreground);
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    opacity 0.15s ease;
+}
+
+.bp-daypicker-wrap .rdp-button_previous:hover:not(:disabled):not([aria-disabled="true"]),
+.bp-daypicker-wrap .rdp-button_next:hover:not(:disabled):not([aria-disabled="true"]) {
+  background-color: color-mix(in oklch, var(--muted) 65%, var(--popover));
+  border-color: color-mix(in oklch, var(--foreground) 11%, transparent);
+}
+
+.bp-daypicker-wrap .rdp-chevron {
+  fill: var(--muted-foreground);
+  opacity: 0.88;
+  width: 0.65rem;
+  height: 0.65rem;
+}
+
+/* Grid: strict column alignment */
+.bp-daypicker-wrap .rdp-month_grid {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.bp-daypicker-wrap .rdp-weekdays {
+  display: table-header-group;
+}
+
+.bp-daypicker-wrap .rdp-week {
+  display: table-row;
+}
+
+.bp-daypicker-wrap .rdp-weekday {
+  width: 14.285714%;
+  padding: var(--rdp-weekday-padding);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  text-align: center;
+  color: var(--muted-foreground);
+  vertical-align: bottom;
+  white-space: nowrap;
+}
+
+.bp-daypicker-wrap .rdp-weeks {
+  display: table-row-group;
+}
+
+.bp-daypicker-wrap .rdp-day {
+  width: 14.285714%;
+  height: auto;
+  padding: 0.125rem 0;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.bp-daypicker-wrap .rdp-day_button {
+  margin-inline: auto;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  color: var(--foreground);
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease,
+    box-shadow 0.15s ease,
+    border-color 0.15s ease,
+    transform 0.12s ease;
+}
+
+.bp-daypicker-wrap .rdp-day_button:hover:not(:disabled):not([aria-disabled="true"]) {
+  background-color: color-mix(in oklch, var(--muted-foreground) 11%, transparent);
+}
+
+.bp-daypicker-wrap .rdp-day_button:active:not(:disabled):not([aria-disabled="true"]) {
+  transform: scale(0.97);
+}
+
+.bp-daypicker-wrap .rdp-day_button:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 2px var(--popover),
+    0 0 0 4px color-mix(in oklch, var(--ring) 45%, transparent);
+}
+
+/* Reset library “selected” row styling — polish lives on the button */
+.bp-daypicker-wrap .rdp-selected {
+  font-weight: inherit;
+  font-size: inherit;
+}
+
+.bp-daypicker-wrap .rdp-selected .rdp-day_button {
+  background-color: color-mix(in oklch, var(--foreground) 11%, var(--popover));
+  color: var(--foreground);
+  font-weight: 600;
+  border-color: color-mix(in oklch, var(--foreground) 14%, transparent);
+  box-shadow: 0 1px 2px color-mix(in oklch, var(--foreground) 6%, transparent);
+}
+
+.bp-daypicker-wrap .rdp-selected .rdp-day_button:hover:not(:disabled):not([aria-disabled="true"]) {
+  background-color: color-mix(in oklch, var(--foreground) 15%, var(--popover));
+}
+
+/* Today — ring, not underline */
+.bp-daypicker-wrap .rdp-today:not(.rdp-selected):not(.rdp-outside) .rdp-day_button {
+  font-weight: 600;
+  box-shadow: inset 0 0 0 1px color-mix(in oklch, var(--muted-foreground) 28%, transparent);
+}
+
+.bp-daypicker-wrap .rdp-today.rdp-selected .rdp-day_button {
+  box-shadow:
+    inset 0 0 0 1px color-mix(in oklch, var(--foreground) 18%, transparent),
+    0 1px 2px color-mix(in oklch, var(--foreground) 6%, transparent);
+}
+
+/* Outside month */
+.bp-daypicker-wrap .rdp-outside .rdp-day_button {
+  color: color-mix(in oklch, var(--muted-foreground) 78%, var(--foreground));
+  opacity: 0.55;
+}
+
+.bp-daypicker-wrap .rdp-outside .rdp-day_button:hover:not(:disabled):not([aria-disabled="true"]) {
+  opacity: 0.85;
+}
+
+/* Disabled / before min date */
+.bp-daypicker-wrap .rdp-disabled .rdp-day_button,
+.bp-daypicker-wrap .rdp-disabled .rdp-day_button:hover {
+  cursor: not-allowed;
+  opacity: 0.32;
+  background-color: transparent !important;
+  box-shadow: none !important;
+  transform: none;
+}
+
+.dark .bp-daypicker-wrap .rdp-root {
+  --rdp-accent-background-color: color-mix(in oklch, var(--foreground) 12%, transparent);
+}
+
+.dark .bp-daypicker-wrap .rdp-selected .rdp-day_button {
+  background-color: color-mix(in oklch, var(--foreground) 14%, transparent);
+  border-color: color-mix(in oklch, var(--foreground) 22%, transparent);
+}
+
+.dark .bp-daypicker-wrap .rdp-button_previous,
+.dark .bp-daypicker-wrap .rdp-button_next {
+  background-color: color-mix(in oklch, var(--muted) 25%, transparent);
+  border-color: color-mix(in oklch, var(--foreground) 10%, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bp-daypicker-wrap .rdp-day_button,
+  .bp-daypicker-wrap .rdp-button_previous,
+  .bp-daypicker-wrap .rdp-button_next {
+    transition: none;
+  }
+
+  .bp-daypicker-wrap .rdp-day_button:active:not(:disabled):not([aria-disabled="true"]) {
+    transform: none;
+  }
+}
