@@ -1,9 +1,14 @@
 import type { ReactNode } from "react";
 
+import {
+  CUSTOMER_BOOKING_JOURNEY_PHASE_COUNT,
+  customerBookingJourneyPhaseLabel,
+  type CustomerBookingJourneyPhase,
+} from "@/lib/bookings/customer-flow/journey";
 import { cn } from "@/lib/utils";
 
 type BookingFlowShellProps = {
-  step: 1 | 2 | 3;
+  step: CustomerBookingJourneyPhase;
   title: string;
   description: string;
   children: ReactNode;
@@ -11,17 +16,15 @@ type BookingFlowShellProps = {
 };
 
 export function BookingFlowShell({ step, title, description, children, actions }: BookingFlowShellProps) {
-  const labels = ["Details", "Confirm", "Paid"] as const;
-
   return (
     <div className="mx-auto w-full max-w-6xl flex-1 pb-28 lg:pb-10">
       <div className="mb-8 flex flex-col gap-4 sm:mb-10 sm:flex-row sm:items-start sm:justify-between">
         <div className="min-w-0 flex-1 space-y-3">
           <p className="text-xs font-medium text-muted-foreground">
-            Step {step} of 3 · {labels[step - 1]}
+            Step {step} of {CUSTOMER_BOOKING_JOURNEY_PHASE_COUNT} · {customerBookingJourneyPhaseLabel(step)}
           </p>
           <div className="flex gap-1.5" role="list" aria-label="Booking progress">
-            {([1, 2, 3] as const).map((n) => (
+            {([1, 2, 3] as const satisfies readonly CustomerBookingJourneyPhase[]).map((n) => (
               <span
                 key={n}
                 role="listitem"
